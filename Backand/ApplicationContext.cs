@@ -1,5 +1,4 @@
 ﻿using Backand.DbEntities;
-using Backand.DbEntities.ConstructionSpace;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backand
@@ -55,7 +54,7 @@ namespace Backand
 
 		public virtual DbSet<Storage_ConstructionUnit> Storage_ConstructionUnit { get; set; }
 
-        public virtual DbSet<StorageToObjectsDistance> StorageToObjectDistance { get; set; }
+        public virtual DbSet<StorageToObjectsDistance> StorageToObjectsDistance { get; set; }
 
         public virtual DbSet<StorageToTransportFleetDistance> StorageToTransportFleetDistance { get; set; }
 
@@ -77,7 +76,7 @@ namespace Backand
 
 		public virtual DbSet<UserType> UserType { get; set; }
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)=> 
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => 
 			optionsBuilder.UseNpgsql(AppContextOptions.Options);
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -158,6 +157,7 @@ namespace Backand
 
 				entity.Property(e => e.ConstructionTypeId).UseIdentityAlwaysColumn();
 				entity.Property(e => e.DocumentPath).HasColumnType("character varying");
+				entity.Property(e => e.IsAssemblyShop).HasColumnType("bool");
 				entity.Property(e => e.Name).HasMaxLength(100);
 			});
 

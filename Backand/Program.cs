@@ -18,13 +18,13 @@ services.AddDistanceService();
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.AllowAnyMethod();
-                          policy.AllowAnyHeader();
-                          policy.AllowAnyOrigin();
-                      });
+	options.AddPolicy(name: MyAllowSpecificOrigins,
+					  policy =>
+					  {
+						  policy.AllowAnyMethod();
+						  policy.AllowAnyHeader();
+						  policy.AllowAnyOrigin();
+					  });
 });
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 services.AddDbContext<ApplicationContext>();

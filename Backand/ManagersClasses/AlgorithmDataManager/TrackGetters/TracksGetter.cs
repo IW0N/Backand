@@ -12,6 +12,7 @@ namespace Backand.ManagersClasses.AlgorithmDataManager.TrackGetters
         public List<MissingDistance> missingDistances;
         public List<TTrack> distances;
     }
+
     public abstract class TracksGetter<TTrack> where TTrack : class
     {
         protected readonly ApplicationContext dbContext;
@@ -23,9 +24,9 @@ namespace Backand.ManagersClasses.AlgorithmDataManager.TrackGetters
             this.distanceService = distanceService;
         }
 
-        protected abstract IEnumerable<UnitIdWithCoordinates> GetEndpoints();
-        protected abstract IEnumerable<UnitIdWithCoordinates> GetStartpoints();
-        protected abstract bool IsRequiredDistance(TTrack distance,UnitIdWithCoordinates startpoint, UnitIdWithCoordinates endpoint);
+		protected abstract Task<IEnumerable<UnitIdWithCoordinates>> GetEndpoints();
+		protected abstract Task<IEnumerable<UnitIdWithCoordinates>> GetStartpoints();
+		protected abstract bool IsRequiredDistance(TTrack distance, UnitIdWithCoordinates startpoint, UnitIdWithCoordinates endpoint);
         protected abstract TTrack ConstructNewTrack(MissingDistance missing, decimal distance);
 
         private void FindMissingDistances(MissingFinderProps<TTrack> props)
@@ -36,7 +37,7 @@ namespace Backand.ManagersClasses.AlgorithmDataManager.TrackGetters
             {
                 foreach (var endpoint in endpoints)
                 {
-                    int index = props.distances.FindIndex(d=>IsRequiredDistance(d, startpoint, endpoint));
+					int index = props.distances.FindIndex(d => IsRequiredDistance(d, startpoint, endpoint));
                     if (index == -1)
                     {
                         props.missingDistances.Add(new MissingDistance
@@ -50,6 +51,7 @@ namespace Backand.ManagersClasses.AlgorithmDataManager.TrackGetters
                 }
             }
         }
+
         private async Task<decimal> GetMissingDistance(MissingDistance missingDistance)
         {
             double[] coord1 = new double[] { missingDistance.Coordinates1.X, missingDistance.Coordinates1.Y };
@@ -58,6 +60,7 @@ namespace Backand.ManagersClasses.AlgorithmDataManager.TrackGetters
 
             return Convert.ToDecimal(await distanceService.GetDistance(routes));
         }
+
         private async Task FillDistancesToDbAdd(List<MissingDistance> missingDistances, List<TTrack> distancesToDbAdd)
         {
             for (int i = 0; i < missingDistances.Count; i++)
@@ -67,10 +70,11 @@ namespace Backand.ManagersClasses.AlgorithmDataManager.TrackGetters
                 distancesToDbAdd.Add(ConstructNewTrack(missingDistances[i], distance));
             }
         }
+
         public async Task<List<TTrack>> GetTrackToEndpoints()
         {
-            IEnumerable<UnitIdWithCoordinates> startpoints = GetStartpoints();
-            IEnumerable<UnitIdWithCoordinates> endpoints = GetEndpoints();
+			IEnumerable<UnitIdWithCoordinates> startpoints = await GetStartpoints();
+			IEnumerable<UnitIdWithCoordinates> endpoints = await GetEndpoints();
 
             List<TTrack> distances = await TrackDbTable.ToListAsync();
             List<MissingDistance> missingDistances = new();

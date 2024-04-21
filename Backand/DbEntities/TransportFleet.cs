@@ -14,7 +14,12 @@ public partial class TransportFleet
 
     public int? CompanyId { get; set; }
 
-    public int? RegionId { get; set; }
+    public int RegionId { get; set; }
+
+    [JsonIgnore]
+    public NpgsqlPoint Coordinates { get; set; }
+
+    public Spot Spot { get => Coordinates.ToSpot(); }
 
     [JsonIgnore]
     public NpgsqlPoint Coordinates { get; set; }

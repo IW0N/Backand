@@ -46,32 +46,8 @@ namespace Backand.FrontendEntities.Requests
 		public Filter Filter { get; init; }
 	}
 
-
-
 	public class AlgorithmRequest
 	{
 		public List<ConstructionOption> ConstructionOptions { get; init; }
-
-		/*
-		примерный запрос с фронта:
-		"фильтры"=[
-			{
-				"constructionId":number,
-				"filters":{
-					"base":"time"|"money"|"balans",
-					"transportTypeIds":[],
-					"buildType":1|2|0//0-пофиг, 1-россыпь, 2-блочный способ, ...
-					"certainLogists": [
-						"лог_компания1",
-						"лог_компания2"...
-					]
-					"certain_manufacturers": [
-						"производитель1",
-						"производитель2"...
-					]
-				}
-			}
-		]
-		*/
 	}
 }

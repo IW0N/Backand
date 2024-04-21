@@ -8,12 +8,15 @@ namespace Backand.DbEntities
 	{
 		public int ConstructionTypeId { get; set; }
 
-		public string Name { get; set; }
+		public string Name { get; set; } = null!;
 
 		public string? DocumentPath { get; set; }
-		[JsonIgnore]
 
+		public bool IsAssemblyShop { get; set; }
+
+		[JsonIgnore]
 		public virtual ICollection<Construction> Constructions { get; set; } = new List<Construction>();
+
 		[JsonIgnore]
 		public virtual ICollection<MaterialSet> MaterialSets { get; set; } = new List<MaterialSet>();
 	}
